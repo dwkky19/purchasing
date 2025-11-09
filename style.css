@@ -1,0 +1,359 @@
+/* ======================== */
+/* PENGATURAN DASAR & VAR   */
+/* ======================== */
+:root {
+    --primary-color: #0077B6; /* Biru Profesional */
+    --primary-dark: #00507a;
+    --secondary-color: #6C757D; /* Abu-abu Sekunder */
+    --success-color: #28A745;
+    --error-color: #DC3545;
+    --bg-color-light: #F8F9FA; /* Latar Belakang Sangat Terang */
+    --bg-color-dark: #E9ECEF; /* Latar Belakang Card/Sidebar */
+    --card-bg: #FFFFFF;
+    --text-color: #343A40;
+    --text-secondary: #6C757D;
+    --border-color: #DEE2E6;
+    --font-family: 'Roboto', sans-serif;
+    --shadow-light: 0 4px 10px rgba(0, 0, 0, 0.05);
+    --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    color: var(--text-color);
+    margin: 0;
+    line-height: 1.6;
+    background-color: var(--bg-color-light);
+    transition: background-color 0.3s;
+}
+
+/* ======================== */
+/* LAYOUT GLOBAL            */
+/* ======================== */
+.main-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+.card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow-light);
+    padding: 30px;
+    transition: box-shadow 0.3s ease;
+}
+.card:hover {
+    box-shadow: var(--shadow-medium);
+}
+
+/* ======================== */
+/* 1. HALAMAN LOGIN (index.html) */
+/* ======================== */
+#login-page {
+    background: linear-gradient(135deg, var(--bg-color-light) 0%, var(--bg-color-dark) 100%);
+}
+.auth-card {
+    width: 420px;
+    text-align: center;
+}
+.auth-header {
+    margin-bottom: 30px;
+}
+.logo-icon {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+.auth-header h1 {
+    font-weight: 500;
+    margin: 0;
+    font-size: 1.8rem;
+}
+.auth-header p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+.auth-footer {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+/* ======================== */
+/* 2. HALAMAN PURCHASING (purchasing.html) */
+/* ======================== */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background-color: var(--card-bg);
+    box-shadow: var(--shadow-light);
+}
+.header-logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--primary-color);
+}
+.header-logo i {
+    margin-right: 10px;
+    font-size: 1.5rem;
+}
+
+.content-body {
+    padding: 30px 40px;
+    max-width: 1200px;
+    margin: auto;
+}
+.profile-layout {
+    display: grid;
+    grid-template-columns: 1fr 2.5fr; /* Sidebar dan Form Utama */
+    gap: 30px;
+}
+
+.sidebar-info {
+    background-color: var(--bg-color-dark);
+    border: 1px solid var(--border-color);
+}
+.sidebar-info h2 {
+    font-size: 1.3rem;
+    color: var(--primary-dark);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+
+/* Style spesifik untuk riwayat pembelian */
+.criteria-list {
+    list-style: none;
+    padding-left: 0;
+    font-size: 0.9rem;
+}
+.criteria-list li {
+    padding: 8px 0;
+    color: var(--text-color);
+    border-bottom: 1px dotted var(--border-color);
+}
+.criteria-list li:last-child {
+    border-bottom: none;
+}
+.criteria-list i {
+    color: var(--primary-color);
+    margin-right: 8px;
+    font-size: 0.9rem;
+}
+
+.form-main h2 {
+    font-size: 1.6rem;
+    margin: 0 0 5px 0;
+}
+.card-subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* ======================== */
+/* FORMULIR ELEMENTS        */
+/* ======================== */
+.form-group {
+    margin-bottom: 20px;
+}
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+}
+.form-group label i {
+    margin-right: 8px;
+    color: var(--text-secondary);
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    background-color: var(--bg-color-light);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.1);
+    background-color: var(--card-bg);
+}
+
+/* Error Handling */
+.form-group .error-message {
+    display: none; 
+    color: var(--error-color);
+    font-size: 0.85rem;
+    margin-top: 6px;
+}
+.form-group.error .error-message { display: block; }
+.form-group.error input,
+.form-group.error select { border-color: var(--error-color); }
+.form-group.error input:focus,
+.form-group.error select:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+/* Feedback & Tombol */
+.feedback-box {
+    padding: 15px;
+    border-radius: 6px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    display: none; 
+}
+.feedback-box.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid var(--success-color);
+}
+.feedback-box.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid var(--error-color);
+}
+
+.form-actions {
+    margin-top: 30px;
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+.btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-light);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-outline-danger {
+    background-color: transparent;
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
+}
+.btn-outline-danger:hover {
+    background-color: var(--error-color);
+    color: white;
+}
+
+/* ======================== */
+/* RESPONSIVE DESIGN        */
+/* ======================== */
+@media (max-width: 900px) {
+    .profile-layout {
+        grid-template-columns: 1fr; /* Stack layout */
+    }
+}
+@media (max-width: 600px) {
+    .form-row {
+        grid-template-columns: 1fr; /* Stack form rows */
+    }
+    .auth-card {
+        margin: 20px;
+        padding: 30px 20px;
+    }
+    .app-header {
+        padding: 15px 20px;
+    }
+    .content-body {
+        padding: 20px;
+    }
+}
+
+* Gaya untuk input yang error */
+.form-group input.input-error,
+.form-group select.input-error,
+.form-group textarea.input-error {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Gaya untuk pesan error di bawah input */
+.error-message {
+    color: #dc3545;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    display: none; /* Defaultnya tersembunyi */
+}
+
+/* Gaya untuk feedback box */
+.feedback-box {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    border: 1px solid transparent;
+}
+
+.feedback-box.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+.feedback-box.success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+/* Untuk list error di feedback box */
+.feedback-box ul {
+    margin-top: 5px;
+    margin-bottom: 0;
+    padding-left: 20px;
+}
