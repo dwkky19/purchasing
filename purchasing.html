@@ -1,114 +1,166 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sistem Purchasing | Buat Permintaan Pembelian</title>
-    <link rel="stylesheet" href="style.css" /> 
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body id="purchasing-page">
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body id="purchasing-page">
     <div class="app-container">
-        <header class="app-header">
-            <div class="header-logo">
-                <i class="fas fa-file-invoice-dollar"></i>
-                <span>Formulir Purchase Request</span>
-            </div>
-            <div>
-                <a href="history.html" class="btn btn-secondary">
-                    <i class="fas fa-history"></i> Riwayat Permintaan
-                </a>
-                <button id="logout-btn" class="btn btn-outline-danger">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+      <header class="app-header">
+        <div class="header-logo">
+          <i class="fas fa-file-invoice-dollar"></i>
+          <span>Formulir Purchase Request</span>
+        </div>
+        <div>
+          <a href="history.html" class="btn btn-secondary">
+            <i class="fas fa-history"></i> Riwayat Permintaan
+          </a>
+          <button id="logout-btn" class="btn btn-outline-danger">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </header>
+
+      <main class="content-body">
+        <div class="profile-layout">
+          <div class="card sidebar-info">
+            <h2><i class="fas fa-book"></i> Pedoman Pengadaan</h2>
+            <p>
+              Mohon isi formulir dengan detail yang akurat. Semua permintaan
+              harus diserahkan 7 hari sebelum tanggal dibutuhkan.
+            </p>
+            <ul class="criteria-list">
+              <li>
+                <i class="fas fa-check-circle"></i> Kuantitas harus lebih dari
+                0.
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i> Tanggal Kebutuhan minimal 7
+                hari ke depan.
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i> Semua bidang wajib diisi.
+              </li>
+            </ul>
+          </div>
+
+          <div class="card form-main">
+            <h2><i class="fas fa-list-alt"></i> Detail Item Permintaan</h2>
+            <p class="card-subtitle">
+              Masukkan detail barang/jasa yang ingin diajukan untuk pembelian.
+            </p>
+
+            <div
+              id="form-feedback"
+              class="feedback-box"
+              style="display: none"
+            ></div>
+
+            <form id="purchasing-form" novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="requester-dept">Departemen Peminta</label>
+                  <select id="requester-dept">
+                    <option value="">-- Pilih Departemen --</option>
+                    <option value="IT">IT</option>
+                    <option value="HRD">HRD</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Marketing">Marketing</option>
+                  </select>
+                  <small class="error-message">Departemen wajib dipilih.</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="need-date"
+                    >Tanggal Kebutuhan (Paling Lambat)</label
+                  >
+                  <input type="date" id="need-date" />
+                  <small class="error-message"
+                    >Tanggal kebutuhan harus 7 hari ke depan.</small
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="item-name"
+                  ><i class="fas fa-box"></i> Nama Barang / Deskripsi
+                  Jasa</label
+                >
+                <input
+                  type="text"
+                  id="item-name"
+                  placeholder="Contoh: 15.6 inch Monitor LED"
+                />
+                <small class="error-message"
+                  >Nama barang/deskripsi tidak boleh kosong.</small
+                >
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="quantity">Kuantitas</label>
+                  <input
+                    type="number"
+                    id="quantity"
+                    min="1"
+                    value="1"
+                    placeholder="Minimum 1"
+                  />
+                  <small class="error-message"
+                    >Kuantitas harus berupa angka (min 1).</small
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label for="unit">Satuan Unit</label>
+                  <select id="unit">
+                    <option value="">-- Pilih Satuan --</option>
+                    <option value="PCS">PCS (Piece)</option>
+                    <option value="UNIT">UNIT</option>
+                    <option value="PACK">PACK</option>
+                  </select>
+                  <small class="error-message">Satuan wajib dipilih.</small>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="purpose"
+                  ><i class="fas fa-bullseye"></i> Tujuan Pengadaan</label
+                >
+                <textarea
+                  id="purpose"
+                  rows="4"
+                  placeholder="Jelaskan secara singkat tujuan pengadaan barang ini."
+                ></textarea>
+                <small class="error-message"
+                  >Tujuan harus diisi (min. 10 karakter).</small
+                >
+              </div>
+
+              <div class="form-actions">
+                <button type="reset" class="btn btn-secondary">
+                  <i class="fas fa-redo"></i> Reset Form
                 </button>
-            </div>
-        </header>
-
-        <main class="content-body">
-            <div class="profile-layout">
-                <div class="card sidebar-info">
-                    <h2><i class="fas fa-book"></i> Pedoman Pengadaan</h2>
-                    <p>Mohon isi formulir dengan detail yang akurat. Semua permintaan harus diserahkan 7 hari sebelum tanggal dibutuhkan.</p>
-                    <ul class="criteria-list">
-                        <li><i class="fas fa-check-circle"></i> Kuantitas harus lebih dari 0.</li>
-                        <li><i class="fas fa-check-circle"></i> Tanggal Kebutuhan minimal 7 hari ke depan.</li>
-                        <li><i class="fas fa-check-circle"></i> Semua bidang wajib diisi.</li>
-                    </ul>
-                </div>
-
-                <div class="card form-main">
-                    <h2><i class="fas fa-list-alt"></i> Detail Item Permintaan</h2>
-                    <p class="card-subtitle">Masukkan detail barang/jasa yang ingin diajukan untuk pembelian.</p>
-
-                    <div id="form-feedback" class="feedback-box" style="display: none;"></div>
-
-                    <form id="purchasing-form" novalidate>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="requester-dept">Departemen Peminta</label>
-                                <select id="requester-dept">
-                                    <option value="">-- Pilih Departemen --</option>
-                                    <option value="IT">IT</option>
-                                    <option value="HRD">HRD</option>
-                                    <option value="Finance">Finance</option>
-                                    <option value="Marketing">Marketing</option>
-                                </select>
-                                <small class="error-message">Departemen wajib dipilih.</small>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="need-date">Tanggal Kebutuhan (Paling Lambat)</label>
-                                <input type="date" id="need-date" />
-                                <small class="error-message">Tanggal kebutuhan harus 7 hari ke depan.</small>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="item-name"><i class="fas fa-box"></i> Nama Barang / Deskripsi Jasa</label>
-                            <input type="text" id="item-name" placeholder="Contoh: 15.6 inch Monitor LED"/>
-                            <small class="error-message">Nama barang/deskripsi tidak boleh kosong.</small>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="quantity">Kuantitas</label>
-                                <input type="number" id="quantity" min="1" value="1" placeholder="Minimum 1"/>
-                                <small class="error-message">Kuantitas harus berupa angka (min 1).</small>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="unit">Satuan Unit</label>
-                                <select id="unit">
-                                    <option value="">-- Pilih Satuan --</option>
-                                    <option value="PCS">PCS (Piece)</option>
-                                    <option value="UNIT">UNIT</option>
-                                    <option value="BOX">BOX</option>
-                                    <option value="SERVICE">SERVICE</option>
-                                </select>
-                                <small class="error-message">Satuan wajib dipilih.</small>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="purpose"><i class="fas fa-bullseye"></i> Tujuan Pengadaan</label>
-                            <textarea id="purpose" rows="4" placeholder="Jelaskan secara singkat tujuan pengadaan barang ini."></textarea>
-                            <small class="error-message">Tujuan harus diisi (min. 10 karakter).</small>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="reset" class="btn btn-secondary"><i class="fas fa-redo"></i> Reset Form</button>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-paper-plane"></i> Kirim Permintaan
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </main>
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-paper-plane"></i> Kirim Permintaan
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
     </div>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
