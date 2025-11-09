@@ -1,7 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const bodyId = document.body.id;
+    // --- Konfigurasi Global ---
     const DB_KEY = "purchaseRequestDB"; // Kunci untuk localStorage
+    const LOGIN_PAGE_URL = 'index.html'; // Anggap halaman login adalah index.html
+    const PURCHASING_PAGE_URL = 'purchasing.html';
+    const bodyId = document.body.id;
+    
+    // --- Kredensial Hardcode (Simulasi) ---
+    const VALID_USERNAME = 'tester'; 
+    const VALID_PASSWORD = 'password123';
 
     // ===================================
     // KODE UTAMA BERDASARKAN HALAMAN
@@ -9,14 +16,27 @@ document.addEventListener('DOMContentLoaded', () => {
     if (bodyId === 'login-page') {
         handleLoginPage(); 
     } else if (bodyId === 'purchasing-page') {
+        // Cek login sebelum menjalankan logika halaman
+        checkLoginStatus(LOGIN_PAGE_URL);
         handlePurchasingPage();
+        setupLogout(LOGIN_PAGE_URL);
     } else if (bodyId === 'history-page') {
-        handleHistoryPage(); // FUNGSI BARU
+        // Cek login sebelum menjalankan logika halaman
+        checkLoginStatus(LOGIN_PAGE_URL);
+        handleHistoryPage(); 
+        setupLogout(LOGIN_PAGE_URL);
     }
-    
+
     // ===================================
-    // FUNGSI UMUM: Login & Logout (Diperlukan di semua halaman)
+    // 🔑 FUNGSI LOGIN & LOGOUT
     // ===================================
+
+    function checkLoginStatus(redirectPage) {
+        if (sessionStorage.getItem("isLoggedIn") !== "true") {
+            alert("Anda harus login terlebih dahulu!");
+            window.location.href = redirectPage;
+        }
+    }
 
     function handleLoginPage() {
         const loginForm = document.getElementById('login-form');
@@ -25,47 +45,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const username = document.getElementById('login-username').value;
-            const password = document.getElementById('login-password').value;
-            const VALID_USERNAME = 'purchaser'; 
-            const VALID_PASSWORD = 'pass123';
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+
+            resetFeedback(loginError);
+
+            if (username === "" || password === "") {
+                alert("Username dan Password tidak boleh kosong!");
+                showFeedback(loginError, false, 'Semua bidang wajib diisi.');
+                return;
+            }
 
             if (username === VALID_USERNAME && password === VALID_PASSWORD) {
                 sessionStorage.setItem("isLoggedIn", "true");
-                window.location.href = 'purchasing.html';
+                alert("Login Berhasil! Anda akan diarahkan ke halaman Purchase Request.");
+                window.location.href = PURCHASING_PAGE_URL;
             } else {
-                showFeedback(loginError, false, 'Kredensial tidak valid.');
+                alert("Login Gagal! Username atau Password salah.");
+                showFeedback(loginError, false, 'Kredensial tidak valid. Silakan coba lagi.');
             }
         });
     }
 
-    function setupLogout(redirectPage = 'login.html') {
+    function setupLogout(redirectPage) {
         const logoutBtn = document.getElementById('logout-btn');
         if (logoutBtn) {
             logoutBtn.addEventListener('click', () => {
                 if (confirm('Apakah Anda yakin ingin logout?')) {
                     sessionStorage.removeItem("isLoggedIn");
+                    // Hapus data lokal di sini (opsional, tergantung kebutuhan)
+                    // localStorage.removeItem("isLoggedIn");
+                    alert("Anda telah logout.");
                     window.location.href = redirectPage; 
                 }
             });
         }
     }
-    // Panggil setupLogout di setiap halaman
-    if (bodyId === 'purchasing-page') setupLogout('login.html');
-    if (bodyId === 'history-page') setupLogout('login.html');
 
 
     // ===================================
     // 🛒 FUNGSI HALAMAN PURCHASING (Form Input)
     // ===================================
     function handlePurchasingPage() {
-        // Guard Login
-        // if (sessionStorage.getItem("isLoggedIn") !== "true") { window.location.href = 'login.html'; return; }
-
         const form = document.getElementById('purchasing-form');
         const formFeedback = document.getElementById('form-feedback');
         
-        // Input Fields (diambil dari purchasing.html)
+        // Input Fields (Pastikan ID ini ada di purchasing.html)
         const requesterDept = document.getElementById('requester-dept');
         const needDate = document.getElementById('need-date');
         const itemName = document.getElementById('item-name');
@@ -74,10 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const purpose = document.getElementById('purpose');
         
         // FUNGSI VALIDASI & SIMPAN SAAT SUBMIT
+        if (!form) return;
+
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            formFeedback.style.display = 'none';
+            resetFeedback(formFeedback);
             resetAllErrors(form);
 
             if (validateAllInputs()) {
@@ -89,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     qty: parseInt(quantity.value),
                     unit: unit.value,
                     purpose: purpose.value.trim(),
-                    requestDate: new Date().toLocaleDateString('id-ID'),
+                    requestDate: new Date().toLocaleDateString('id-ID', { year: 'numeric', month: '2-digit', day: '2-digit' }),
                 };
                 
                 savePurchaseData(purchaseData);
@@ -105,57 +132,95 @@ document.addEventListener('DOMContentLoaded', () => {
         // FUNGSI VALIDASI
         function validateAllInputs() {
             let isValid = true; 
+            let errorList = [];
             
-            if (requesterDept.value === '') { showInputError(requesterDept, 'Departemen wajib dipilih.'); isValid = false; }
-            if (needDate.value === '') { showInputError(needDate, 'Tanggal kebutuhan wajib diisi.'); isValid = false; }
-            else if (!isDateAhead(needDate.value, 7)) { showInputError(needDate, 'Tanggal kebutuhan harus minimal 7 hari ke depan.'); isValid = false; }
+            // 1. Departemen
+            if (requesterDept.value === '' || requesterDept.value.includes('Pilih Departemen')) { 
+                showInputError(requesterDept, 'Departemen wajib dipilih.'); 
+                isValid = false; 
+                errorList.push('Departemen Peminta');
+            }
+            
+            // 2. Tanggal Kebutuhan (Minimal 7 hari ke depan)
+            if (needDate.value === '') { 
+                showInputError(needDate, 'Tanggal kebutuhan wajib diisi.'); 
+                isValid = false; 
+                errorList.push('Tanggal Kebutuhan');
+            }
+            else if (!isDateAhead(needDate.value, 7)) { 
+                showInputError(needDate, 'Tanggal kebutuhan harus minimal 7 hari ke depan.'); 
+                isValid = false; 
+                errorList.push('Tanggal Kebutuhan (Min. 7 hari)');
+            }
 
-            if (itemName.value.trim().length < 5) { showInputError(itemName, 'Nama barang minimal 5 karakter.'); isValid = false; }
+            // 3. Nama Barang
+            if (itemName.value.trim().length < 5) { 
+                showInputError(itemName, 'Nama barang minimal 5 karakter.'); 
+                isValid = false; 
+                errorList.push('Nama Barang');
+            }
 
+            // 4. Kuantitas
             const qty = parseInt(quantity.value);
-            if (isNaN(qty) || qty <= 0) { showInputError(quantity, 'Kuantitas harus berupa angka dan minimal 1.'); isValid = false; }
+            if (isNaN(qty) || qty <= 0) { 
+                showInputError(quantity, 'Kuantitas harus berupa angka dan minimal 1.'); 
+                isValid = false; 
+                errorList.push('Kuantitas');
+            }
 
-            if (unit.value === '') { showInputError(unit, 'Satuan unit wajib dipilih.'); isValid = false; }
+            // 5. Satuan Unit
+            if (unit.value === '' || unit.value.includes('Pilih Satuan')) { 
+                showInputError(unit, 'Satuan unit wajib dipilih.'); 
+                isValid = false; 
+                errorList.push('Satuan Unit');
+            }
             
-            if (purpose.value.trim().length < 10) { showInputError(purpose, 'Tujuan pengadaan minimal 10 karakter.'); isValid = false; }
+            // 6. Tujuan
+            if (purpose.value.trim().length < 10) { 
+                showInputError(purpose, 'Tujuan pengadaan minimal 10 karakter.'); 
+                isValid = false; 
+                errorList.push('Tujuan Pengadaan');
+            }
             
             return isValid;
         }
     }
 
     // ===================================
-    // 📊 FUNGSI HALAMAN HISTORY (Menampilkan Data) [FUNGSI BARU]
+    // 📊 FUNGSI HALAMAN HISTORY (Menampilkan Data)
     // ===================================
     function handleHistoryPage() {
-        // Guard Login
-        // if (sessionStorage.getItem("isLoggedIn") !== "true") { window.location.href = 'login.html'; return; }
-        
         const tableBody = document.querySelector('#purchase-data-table tbody');
         const purchaseCountSpan = document.getElementById("purchase-count");
         const noDataMessage = document.getElementById("no-data-message");
         const clearDataBtn = document.getElementById('clear-data-btn');
 
+        if (!tableBody) return; // Guard untuk memastikan elemen tabel ada
+
         loadPurchaseDataToTable();
 
         // Aksi Hapus Semua Data Riwayat
-        clearDataBtn.addEventListener('click', () => {
-            if (confirm('PERINGATAN: Anda yakin ingin menghapus SEMUA data riwayat permintaan pembelian?')) {
-                localStorage.removeItem(DB_KEY);
-                loadPurchaseDataToTable(); // Muat ulang tabel yang kosong
-                alert('Semua data riwayat pembelian berhasil dihapus.');
-            }
-        });
+        if (clearDataBtn) {
+            clearDataBtn.addEventListener('click', () => {
+                if (confirm('PERINGATAN: Anda yakin ingin menghapus SEMUA data riwayat permintaan pembelian?')) {
+                    localStorage.removeItem(DB_KEY);
+                    loadPurchaseDataToTable(); // Muat ulang tabel yang kosong
+                    alert('Semua data riwayat pembelian berhasil dihapus.');
+                }
+            });
+        }
 
         function loadPurchaseDataToTable() {
             const data = getPurchaseData().reverse(); // Tampilkan yang terbaru di atas
             tableBody.innerHTML = '';
-            purchaseCountSpan.textContent = data.length;
+            
+            if (purchaseCountSpan) purchaseCountSpan.textContent = data.length;
 
             if (data.length === 0) {
-                noDataMessage.style.display = 'block';
+                if (noDataMessage) noDataMessage.style.display = 'block';
                 return;
             }
-            noDataMessage.style.display = 'none';
+            if (noDataMessage) noDataMessage.style.display = 'none';
 
             data.forEach((item, index) => {
                 const row = tableBody.insertRow();
@@ -167,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${item.qty}</td>
                     <td>${item.unit}</td>
                     <td>${item.needDate}</td>
-                    <td>${item.purpose.substring(0, 50)}...</td>
+                    <td>${item.purpose.substring(0, 50)}${item.purpose.length > 50 ? '...' : ''}</td>
                 `;
             });
         }
@@ -197,6 +262,13 @@ document.addEventListener('DOMContentLoaded', () => {
         element.className = isSuccess ? 'feedback-box success' : 'feedback-box error';
         element.innerHTML = message;
     }
+
+    /** Menyembunyikan feedback global */
+    function resetFeedback(element) {
+        element.style.display = 'none';
+        element.className = 'feedback-box';
+        element.innerHTML = '';
+    }
     
     /** Menampilkan pesan error di bawah input spesifik */
     function showInputError(inputElement, message) {
@@ -205,6 +277,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const errorMessage = formGroup.querySelector('.error-message');
         if (errorMessage) {
             errorMessage.textContent = message;
+            // Ini penting untuk menampilkan error
+            errorMessage.style.display = 'block'; 
         }
     }
 
@@ -213,6 +287,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const errorGroups = formElement.querySelectorAll('.form-group.error');
         errorGroups.forEach(group => {
             group.classList.remove('error');
+            const errorMessage = group.querySelector('.error-message');
+            if(errorMessage) {
+                // Ini penting untuk menyembunyikan error
+                errorMessage.style.display = 'none';
+            }
         });
     }
 
