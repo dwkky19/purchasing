@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = PURCHASING_PAGE_URL;
             } else {
                 alert("Login Gagal! Username atau Password salah.");
-                showFeedback(loginError, false, 'Kredensial tidak valid. Silakan coba lagi.');
+                showFeedback(loginError, false, 'Username atau Password salah');
             }
         });
     }
