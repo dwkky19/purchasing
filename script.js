@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Cek status login (Guard Clause)
     if (sessionStorage.getItem("isLoggedIn") !== "true") {
       alert("Anda harus login terlebih dahulu!");
-      window.location.href = "login.html"; // Redirect kembali jika belum login
+      window.location.href = "index.html"; // Redirect kembali jika belum login
       return;
     }
 
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 1. Hapus status login dari sesi
         sessionStorage.removeItem("isLoggedIn");
         // 2. Arahkan pengguna kembali ke index.html
-        window.location.href = "login.html";
+        window.location.href = "index.html";
       }
     });
     // ***************************************************************
@@ -427,7 +427,7 @@ document.addEventListener("DOMContentLoaded", () => {
       logoutBtn.addEventListener("click", () => {
         localStorage.removeItem("isLoggedIn");
         alert("Anda telah logout.");
-        window.location.href = "login.html"; // Ganti ke halaman login
+        window.location.href = "index.html"; // Ganti ke halaman login
       });
     }
   }
