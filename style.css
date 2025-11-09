@@ -357,3 +357,49 @@ body {
     margin-bottom: 0;
     padding-left: 20px;
 }
+
+/* Gaya untuk Halaman Riwayat (history.html) */
+.history-data-container {
+    padding: 30px;
+    margin-top: 20px;
+}
+.data-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
+.data-header h2 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: var(--primary-dark);
+}
+
+#purchase-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 0.9rem;
+}
+#purchase-data-table th,
+#purchase-data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+#purchase-data-table thead th {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+#purchase-data-table tbody tr:hover {
+    background-color: var(--bg-color-dark);
+    cursor: pointer;
+}
+#purchase-data-table tbody td:first-child {
+    font-weight: 700;
+}

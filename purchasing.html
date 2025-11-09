@@ -15,9 +15,14 @@
                 <i class="fas fa-file-invoice-dollar"></i>
                 <span>Formulir Purchase Request</span>
             </div>
-            <button id="logout-btn" class="btn btn-outline-danger">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
+            <div>
+                <a href="history.html" class="btn btn-secondary">
+                    <i class="fas fa-history"></i> Riwayat Permintaan
+                </a>
+                <button id="logout-btn" class="btn btn-outline-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
         </header>
 
         <main class="content-body">
@@ -36,7 +41,7 @@
                     <h2><i class="fas fa-list-alt"></i> Detail Item Permintaan</h2>
                     <p class="card-subtitle">Masukkan detail barang/jasa yang ingin diajukan untuk pembelian.</p>
 
-                    <div id="form-feedback" class="feedback-box"></div>
+                    <div id="form-feedback" class="feedback-box" style="display: none;"></div>
 
                     <form id="purchasing-form" novalidate>
                         

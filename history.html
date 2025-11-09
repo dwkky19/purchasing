@@ -1,0 +1,62 @@
+    <!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem Purchasing | Riwayat Permintaan</title>
+    <link rel="stylesheet" href="style.css" /> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+<body id="history-page">
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-logo">
+                <i class="fas fa-table"></i>
+                <span>Riwayat Permintaan Pembelian</span>
+            </div>
+            <div>
+                <a href="purchasing.html" class="btn btn-secondary">
+                    <i class="fas fa-plus"></i> Buat PR Baru
+                </a>
+                <button id="logout-btn" class="btn btn-outline-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <main class="content-body">
+            <div class="card history-data-container">
+                <div class="data-header">
+                    <h2><i class="fas fa-list-ul"></i> Data Permintaan Masuk (<span id="purchase-count">0</span>)</h2>
+                    <button id="clear-data-btn" class="btn btn-outline-danger btn-sm">
+                        <i class="fas fa-trash-alt"></i> Hapus Semua Data (Simulasi)
+                    </button>
+                </div>
+                
+                <table id="purchase-data-table">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Tgl. Request</th>
+                            <th>Departemen</th>
+                            <th>Nama Barang</th>
+                            <th>Qty</th>
+                            <th>Satuan</th>
+                            <th>Tgl. Kebutuhan</th>
+                            <th>Tujuan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+                <div id="no-data-message" style="text-align: center; padding: 20px; color: #6c757d; font-style: italic; display: none;">
+                    Belum ada data Permintaan Pembelian yang tercatat.
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
