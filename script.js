@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function loadPurchaseDataToTable() {
             const data = getPurchaseData().reverse(); // Tampilkan yang terbaru di atas
-            tableBody.innerHTML = '';x
+            tableBody.innerHTML = '';
             
             if (purchaseCountSpan) purchaseCountSpan.textContent = data.length;
 
